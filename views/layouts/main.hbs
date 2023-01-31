@@ -30,6 +30,9 @@
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"
     ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ckeditor/4.20.1/ckeditor.js" 
+    integrity="sha512-zFNDGGU5T3I464vTJn5SupfBJEoxFa7oa5BRkQjm409ORBe1U4f7cpbylDdV21yrmjmYKo3Y0sPTxR9kBgSkvQ=="
+     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -38,7 +41,9 @@
       // specify options here
     });
   });
+  M.FormSelect.init(document.querySelector('#status'))
 
+  
   // Initialize collapsible (uncomment the lines below if you use the dropdown variation)
   // var collapsibleElem = document.querySelector('.collapsible');
   // var collapsibleInstance = M.Collapsible.init(collapsibleElem, {
@@ -52,7 +57,11 @@
       // specify options here
     });
   });
-        
+    </script>
+    <script>
+      CKEDITOR.replace('body', {
+    plugins: 'wysiwygarea, toolbar, basicstyles, link'
+  })
     </script>
 
   </body>

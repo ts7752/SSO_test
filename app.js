@@ -17,6 +17,11 @@ require("./config/passport")(passport);
 connectDB();
 
 const app = express();
+
+//Body parser
+app.use(express.urlencoded({extended: false}))
+app.use(express.json())
+
 // Logging
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
@@ -27,17 +32,16 @@ app.set("view engine", ".hbs");
 app.set("views", "./views");
 
 //Sessions
-app.use(
-  session({
-    secret: "secretkey",
-    resave: true,
-    saveUninitialized: true,
-    cookie: { maxAge: 19 * 60000 }, // store for 19 minutes
-    store: MongoStore.create({
-      client: mongoose.connection.getClient(),
-    }),
-  })
-);
+app.use(session({
+
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: false,
+  store: MongoStore.create({
+    mongoUrl:process.env.MONGO_URI,
+    mongooseConnection: mongoose.connection}),
+
+}))
 
 //Passport Midleware
 app.use(passport.initialize());
@@ -49,6 +53,7 @@ app.use(express.static(path.join(__dirname, "public")));
 // Routes
 app.use("/", require("./route/index"));
 app.use("/auth", require("./route/auth"));
+app.use("/stories", require("./route/stories"));
 
 const PORT = process.env.PORT || 3000;
 
