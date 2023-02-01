@@ -19,33 +19,57 @@ connectDB();
 const app = express();
 
 //Body parser
-app.use(express.urlencoded({extended: false}))
-app.use(express.json())
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
 // Logging
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
+
+//Handlebars helpers
+const {
+  formatDate,
+  stripTags,
+  truncate,
+  editIcon,
+  select,
+} = require("./helpers/hbs");
+
 // Handlebars
-app.engine(".hbs", engine({ defaultlayout: "main", extname: ".hbs" }));
+app.engine(
+  ".hbs",
+  engine({
+    helpers: { formatDate, stripTags, truncate, editIcon, select },
+    defaultlayout: "main",
+    extname: ".hbs",
+  })
+);
 app.set("view engine", ".hbs");
 app.set("views", "./views");
 
 //Sessions
-app.use(session({
-
-  secret: 'keyboard cat',
-  resave: false,
-  saveUninitialized: false,
-  store: MongoStore.create({
-    mongoUrl:process.env.MONGO_URI,
-    mongooseConnection: mongoose.connection}),
-
-}))
+app.use(
+  session({
+    secret: "keyboard cat",
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({
+      mongoUrl: process.env.MONGO_URI,
+      mongooseConnection: mongoose.connection,
+    }),
+  })
+);
 
 //Passport Midleware
 app.use(passport.initialize());
 app.use(passport.session());
+
+//Set Gloabal var
+app.use(function (req, res, next) {
+  res.locals.user = req.user || null;
+  next();
+});
 
 //Static Folders
 app.use(express.static(path.join(__dirname, "public")));

@@ -1,18 +1,20 @@
-<h3>추가</h3>
+<h3>수정</h3>
 <div class="row">
   <form action="/stories" method="POST" class="col s12">
     <div class="row">
       <div class="input-field">
-        <input type="text" id="title" name="title" />
+        <input type="text" id="title" name="title" value="{{story.title}}" />
         <label for="title">Title</label>
       </div>
     </div>
 
     <div class="row">
       <div class="input-field">
+        {{#select story.status}}
         <select id="status" name="status">
           <option value="public" selected>Public</option>
-          <option value="private">Private</option>
+          <option value="private">Private</option>      {{! private 설정시 공개되지 않음}}
+          {{/select}}
         </select>
         <label for="status">Status</label>
       </div>
@@ -21,7 +23,7 @@
     <div class="row">
       <div class="input-field">
         <h5>Tell Us Your Story:</h5>
-        <textarea id="body" name="body"></textarea>
+        <textarea id="body" name="body">{{story.body}}</textarea>
       </div>
     </div>
 
